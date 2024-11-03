@@ -79,8 +79,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Google Places API 초기화
         if (!Places.isInitialized()) {
-            Places.initialize(applicationContext, "AIzaSyDkoP6r8hnWyrMknlg-3myS0PM5ZSULwfo")
-        }
+            Places.initialize(applicationContext, "AIzaSyBACh9sIx02ssIdxgcq866hl_WWElI234o")
+        } //AIzaSyDkoP6r8hnWyrMknlg-3myS0PM5ZSULwfo
 
         // PlacesClient 생성
         val placesClient = Places.createClient(this)

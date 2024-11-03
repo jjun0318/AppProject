@@ -145,7 +145,7 @@ class MainActivity : AppCompatActivity() {
     // cate 의 값이 N 인 것만 데이터로 보내기
     binding.btnIng.setOnClickListener {
 
-        // db연결 버전
+      // db연결 버전
       Client.retrofit.findComplete('N').enqueue(object:retrofit2.Callback<List<TravelData>>{
         override fun onResponse(call: Call<List<TravelData>>, response: Response<List<TravelData>>) {
           mainAdapter.mainList.clear() // 어댑터에 있는 데이터 지우고 채우기
@@ -188,7 +188,7 @@ class MainActivity : AppCompatActivity() {
 
     // 추가하기 다이얼로그
     // 제목, 출발, 마감, 카테고리
-    binding.btnAdd.setOnClickListener { 
+    binding.btnAdd.setOnClickListener {
       val dialogInsert = CustomDdayBinding.inflate(layoutInflater)
 
       // spinner 드롭다운 어댑터
@@ -288,7 +288,7 @@ class MainActivity : AppCompatActivity() {
               dialogInsert.edtStart.text.toString(),
               dialogInsert.edtEnd.text.toString(),
               cateSelected,
-               'N'))
+              'N'))
 
 //            mainAdapter.insertData(d)
 
