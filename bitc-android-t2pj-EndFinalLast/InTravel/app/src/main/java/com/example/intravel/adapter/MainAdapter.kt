@@ -19,8 +19,6 @@ import retrofit2.Response
 import java.lang.Integer.parseInt
 import java.text.Format
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Date
 
 class MainAdapter(var mainList: MutableList<TravelData>):RecyclerView.Adapter<MainAdapter.MainHolder>() {
@@ -32,25 +30,32 @@ class MainAdapter(var mainList: MutableList<TravelData>):RecyclerView.Adapter<Ma
     private var today = parseInt(dateFormat.format(sysDate))
 
     // 오늘 날짜 활용해야함, 생성일X
-    fun ddayCal(data: TravelData): String {
-        // 오늘 날짜 가져오기
-        val today = LocalDate.now()
+    fun ddayCal(data:TravelData):String{
+    // 계산하기 위한 int 변환
+        var startDate = parseInt(data.startDate)
 
-        // 날짜 포맷 정의
-        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+//        var endDate = parseInt(data.endDate)
 
-        // 시작 날짜 파싱
-        val startDate = LocalDate.parse(data.startDate, formatter)
+        var result = startDate-today // 시작 날짜 - 오늘 날짜
 
-        // D-Day 계산
-        val result = startDate.toEpochDay() - today.toEpochDay()
+        var dday = ""  // 반환할 string 값
 
-        // 반환할 string 값
-        return when {
-            result < 0 -> "+${-result}" // 오늘 > 시작
-            result == 0L -> "-day" // 오늘 == 시작
-            else -> "-$result" // 오늘 < 시작
+        // 디데이 +/- 계산
+        if(result <0){
+        // 오늘 > 시작
+            result = -result
+            dday = "+${result}"
+
         }
+        else if(result == 0){
+            dday = "-day"
+        }
+        else{
+        // 오늘 < 시작
+            dday = "-${result}"
+        }
+
+        return dday
     }
 
 //    fun updateComplete(data:TravelData, position: Int){
@@ -73,7 +78,7 @@ class MainAdapter(var mainList: MutableList<TravelData>):RecyclerView.Adapter<Ma
         mainList.add(data)
         notifyDataSetChanged()
     }
-
+    
     class MainHolder(var binding: ItemMainBinding):RecyclerView.ViewHolder(binding.root) {
 
     }
@@ -232,7 +237,7 @@ class MainAdapter(var mainList: MutableList<TravelData>):RecyclerView.Adapter<Ma
                 }
 
 
-
+                
                 setPositiveButton("확인",object: DialogInterface.OnClickListener{
                     override fun onClick(p0: DialogInterface?, p1: Int) {
                         val d = TravelData( // 수정된 데이터 생성
@@ -286,7 +291,7 @@ class MainAdapter(var mainList: MutableList<TravelData>):RecyclerView.Adapter<Ma
         // 오늘 날짜가 enddate 보다 크다면 디비에 tId, Y 전달, 업데이트랑 비슷하게 하면 될듯?
         // 마감 날짜 받아오기
         var endDate = parseInt(data.endDate)
-        if(data.travComplete=='N' && today > endDate){ // 완료 날짜 다음날이면 확인 창
+        if(data.travComplete=='N' && today == endDate+1){ // 완료 날짜 다음날이면 확인 창
             // 여행 완료 됐는지 묻는 창
             AlertDialog.Builder(holder.itemView.context).run{
                 setTitle("여행 완료 여부")
@@ -350,6 +355,7 @@ class MainAdapter(var mainList: MutableList<TravelData>):RecyclerView.Adapter<Ma
 
             // 아니라면 수정해달라고 하기
         } //if
+
     }//onBindViewHolder
 
     override fun getItemCount(): Int {
